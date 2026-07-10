@@ -1,4 +1,5 @@
 const STORE = "study-flow-data-v1";
+const DATA_VERSION = "empty-start-v1";
 const routes = ["home", "tasks", "subjects", "grades"];
 let state = load();
 let currentRoute = "home";
@@ -12,32 +13,22 @@ function applyTheme(theme) {
   button.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
 }
 
-function seed() {
+function emptyState() {
   return {
-    subjects: [
-      { id: "calculus", name: "Calculus I", professor: "Dr. Rivera", schedule: "Mon / Wed · 8:00 AM", semester: 2 },
-      { id: "programming", name: "Programming Fundamentals", professor: "Prof. Gomez", schedule: "Tue / Thu · 10:00 AM", semester: 1 },
-      { id: "writing", name: "Academic Writing", professor: "Prof. Martinez", schedule: "Friday · 2:00 PM", semester: 1 }
-    ],
-    categories: [
-      { id: "cat-1", subjectId: "calculus", name: "Exams", weight: 50 }, { id: "cat-2", subjectId: "calculus", name: "Problem sets", weight: 30 }, { id: "cat-3", subjectId: "calculus", name: "Quizzes", weight: 20 },
-      { id: "cat-4", subjectId: "programming", name: "Programming", weight: 40 }, { id: "cat-5", subjectId: "programming", name: "Quizzes", weight: 25 }, { id: "cat-6", subjectId: "programming", name: "Final project", weight: 35 },
-      { id: "cat-7", subjectId: "writing", name: "Essays", weight: 60 }, { id: "cat-8", subjectId: "writing", name: "Participation", weight: 20 }, { id: "cat-9", subjectId: "writing", name: "Final portfolio", weight: 20 }
-    ],
-    tasks: [
-      { id: "task-1", subjectId: "calculus", categoryId: "cat-2", title: "Problem set 2", due: datePlus(3), status: "pending", grade: null, notes: "Exercises 1–20." },
-      { id: "task-2", subjectId: "programming", categoryId: "cat-4", title: "Mini project proposal", due: datePlus(5), status: "in progress", grade: null, notes: "Describe app idea and data model." },
-      { id: "task-3", subjectId: "writing", categoryId: "cat-7", title: "Essay draft", due: datePlus(8), status: "submitted", grade: null, notes: "Waiting for feedback." },
-      { id: "task-4", subjectId: "calculus", categoryId: "cat-3", title: "Quiz 1", due: datePlus(-2), status: "graded", grade: 4.2, notes: "Good work." }
-    ],
-    topics: [
-      { id: "topic-1", subjectId: "calculus", name: "Limits and continuity", status: "studying", notes: "Review epsilon-delta examples." },
-      { id: "topic-2", subjectId: "programming", name: "Python functions", status: "seen", notes: "Practice with small exercises." }
-    ]
+    subjects: [],
+    categories: [],
+    tasks: [],
+    topics: []
   };
 }
 
-function load() { try { return JSON.parse(localStorage.getItem(STORE)) || seed(); } catch { return seed(); } }
+function load() {
+  if (localStorage.getItem(`${STORE}-version`) !== DATA_VERSION) {
+    localStorage.setItem(`${STORE}-version`, DATA_VERSION);
+    return emptyState();
+  }
+  try { return JSON.parse(localStorage.getItem(STORE)) || emptyState(); } catch { return emptyState(); }
+}
 function save() { localStorage.setItem(STORE, JSON.stringify(state)); }
 function uid(prefix) { return `${prefix}-${crypto.randomUUID ? crypto.randomUUID() : Date.now()}`; }
 function datePlus(days) { const d = new Date(); d.setDate(d.getDate() + days); return d.toISOString().slice(0, 10); }
@@ -74,14 +65,14 @@ function homePage() {
     <article class="card hero"><div class="hero-row"><div><p>${next ? "Next deadline" : "You are all caught up"}</p><span class="hero-value">${next ? esc(dueLabel(next.due)) : "Nice!"}</span><strong>${next ? esc(next.title) : "No open tasks"}</strong></div>${next ? statusBadge(next.status) : ""}</div></article>
     <div class="metric-grid"><article class="metric"><span>Open tasks</span><strong>${open.length}</strong></article><article class="metric"><span>Completed tasks</span><strong>${completed}</strong></article></div>
     <div class="row"><h3 class="section-title">Coming up</h3><button class="button-secondary small" data-route="tasks">View all</button></div>
-    ${open.length ? `<div class="list">${open.slice(0, 4).map(taskCard).join("")}</div>` : empty("No open tasks. Add one with the + button.")}</section><button class="fab" data-action="add-task" aria-label="Add task">+</button>`;
+    ${open.length ? `<div class="list">${open.slice(0, 4).map(taskCard).join("")}</div>` : empty(state.subjects.length ? "No open tasks. Add one with the + button." : "Start by adding your first subject.")}</section><button class="fab" data-action="${state.subjects.length ? "add-task" : "add-subject"}" aria-label="${state.subjects.length ? "Add task" : "Add subject"}">+</button>`;
 }
 
 function taskCard(task) { const s = subject(task.subjectId); return `<button class="list-button" data-action="edit-task" data-id="${task.id}"><div class="row"><span class="task-title">${esc(task.title)}</span>${statusBadge(task.status)}</div><div class="task-meta"><span>${esc(s?.name || "No subject")}</span><span>${esc(formatDate(task.due))} · ${esc(dueLabel(task.due))}</span></div></button>`; }
-function tasksPage() { const tasks = [...state.tasks].sort((a, b) => a.due.localeCompare(b.due)); return `<section class="stack"><div class="page-heading"><div><h2>Tasks</h2><p>Everything you need to submit.</p></div></div>${tasks.length ? `<div class="list">${tasks.map(taskCard).join("")}</div>` : empty("No tasks yet.")}</section><button class="fab" data-action="add-task" aria-label="Add task">+</button>`; }
+function tasksPage() { const tasks = [...state.tasks].sort((a, b) => a.due.localeCompare(b.due)); return `<section class="stack"><div class="page-heading"><div><h2>Tasks</h2><p>Everything you need to submit.</p></div></div>${tasks.length ? `<div class="list">${tasks.map(taskCard).join("")}</div>` : empty(state.subjects.length ? "No tasks yet." : "Add a subject before creating tasks.")}</section><button class="fab" data-action="${state.subjects.length ? "add-task" : "add-subject"}" aria-label="${state.subjects.length ? "Add task" : "Add subject"}">+</button>`; }
 function subjectsPage() { return `<section class="stack"><div class="page-heading"><div><h2>Subjects</h2><p>Courses, topics, and grading.</p></div></div><div class="list">${state.subjects.map(subjectCard).join("")}</div></section><button class="fab" data-action="add-subject" aria-label="Add subject">+</button>`; }
 function subjectCard(item) { const data = courseGrades(item.id); const topics = state.topics.filter(topic => topic.subjectId === item.id); return `<button class="list-button subject-card" data-action="subject-detail" data-id="${item.id}"><div class="subject-title"><span class="task-title">${esc(item.name)}</span><span class="grade">${data.grade === null ? "—" : data.grade.toFixed(2)}</span></div><div class="task-meta"><span>${esc(item.schedule || "No schedule")}</span><span>${topics.length} topic${topics.length === 1 ? "" : "s"}</span></div><div class="progress"><span style="width:${Math.min(100, data.configured)}%"></span></div></button>`; }
-function gradesPage() { return `<section class="stack"><div class="page-heading"><div><h2>Grades</h2><p>Calculated from graded tasks.</p></div></div>${state.subjects.map(item => { const data = courseGrades(item.id); return `<article class="card"><div class="card-head"><div><h3>${esc(item.name)}</h3><p class="muted">${data.gradedWeight}% of ${data.configured}% graded</p></div><span class="grade">${data.grade === null ? "—" : data.grade.toFixed(2)}</span></div><div class="progress"><span style="width:${data.configured ? (data.gradedWeight / data.configured) * 100 : 0}%"></span></div></article>`; }).join("")}</section>`; }
+function gradesPage() { return `<section class="stack"><div class="page-heading"><div><h2>Grades</h2><p>Calculated from graded tasks.</p></div></div>${state.subjects.length ? state.subjects.map(item => { const data = courseGrades(item.id); return `<article class="card"><div class="card-head"><div><h3>${esc(item.name)}</h3><p class="muted">${data.gradedWeight}% of ${data.configured}% graded</p></div><span class="grade">${data.grade === null ? "—" : data.grade.toFixed(2)}</span></div><div class="progress"><span style="width:${data.configured ? (data.gradedWeight / data.configured) * 100 : 0}%"></span></div></article>`; }).join("") : empty("Your grades will appear here after you add subjects and graded tasks.")}</section>`; }
 function empty(text) { return `<div class="empty">${esc(text)}</div>`; }
 
 function openSheet(title, body) { const sheet = document.querySelector("#sheet"); sheet.innerHTML = `<div class="sheet"><div class="sheet-header"><h2>${esc(title)}</h2><button type="button" class="close" data-action="close" aria-label="Close">×</button></div>${body}</div>`; sheet.showModal(); sheet.querySelectorAll("[data-action]").forEach(button => button.addEventListener("click", () => action(button.dataset.action, button.dataset.id))); sheet.querySelectorAll("form[data-form]").forEach(form => form.addEventListener("submit", submitForm)); sheet.querySelector("input, select, textarea")?.focus(); }
@@ -96,11 +87,11 @@ function topicForm(item = {}, subjectId) { openSheet(item.id ? "Edit topic" : "N
 
 function bindPageEvents() { document.querySelectorAll("[data-route]").forEach(button => button.addEventListener("click", () => navigate(button.dataset.route))); document.querySelectorAll("[data-action]").forEach(button => button.addEventListener("click", () => action(button.dataset.action, button.dataset.id))); document.querySelectorAll("form[data-form]").forEach(form => form.addEventListener("submit", submitForm)); }
 function navigate(route) { if (!routes.includes(route)) return; currentRoute = route; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
-function action(name, id) { if (name === "close") return document.querySelector("#sheet").close(); if (name === "add-task") return taskForm(); if (name === "edit-task") return taskForm(state.tasks.find(item => item.id === id)); if (name === "add-subject") return subjectForm(); if (name === "edit-subject") return subjectForm(subject(id)); if (name === "subject-detail") return detailSheet(id); if (name === "add-category") return categoryForm({}, id); if (name === "edit-category") { const item = category(id); return categoryForm(item, item.subjectId); } if (name === "add-topic") return topicForm({}, id); if (name === "edit-topic") { const item = state.topics.find(topic => topic.id === id); return topicForm(item, item.subjectId); } if (name.startsWith("delete-")) deleteItem(name.slice(7), id); }
+function action(name, id) { if (name === "close") return document.querySelector("#sheet").close(); if (name === "add-task") return state.subjects.length ? taskForm() : subjectForm(); if (name === "edit-task") return taskForm(state.tasks.find(item => item.id === id)); if (name === "add-subject") return subjectForm(); if (name === "edit-subject") return subjectForm(subject(id)); if (name === "subject-detail") return detailSheet(id); if (name === "add-category") return categoryForm({}, id); if (name === "edit-category") { const item = category(id); return categoryForm(item, item.subjectId); } if (name === "add-topic") return topicForm({}, id); if (name === "edit-topic") { const item = state.topics.find(topic => topic.id === id); return topicForm(item, item.subjectId); } if (name.startsWith("delete-")) deleteItem(name.slice(7), id); }
 function submitForm(event) { event.preventDefault(); const values = Object.fromEntries(new FormData(event.currentTarget)); const type = event.currentTarget.dataset.form; if (type === "task") { const grade = values.grade === "" ? null : Number(values.grade); if (grade !== null && (grade < 1 || grade > 5)) return toast("Grade must be between 1.0 and 5.0."); const item = { ...values, id: values.id || uid("task"), grade }; upsert("tasks", item); } if (type === "subject") upsert("subjects", { ...values, id: values.id || uid("subject"), semester: Number(values.semester) }); if (type === "category") { const item = { ...values, id: values.id || uid("category"), weight: Number(values.weight) }; const total = state.categories.filter(category => category.subjectId === item.subjectId && category.id !== item.id).reduce((sum, category) => sum + category.weight, 0) + item.weight; if (total > 100) return toast("Category weights cannot exceed 100%."); upsert("categories", item); } if (type === "topic") upsert("topics", { ...values, id: values.id || uid("topic") }); save(); document.querySelector("#sheet").close(); render(); window.scrollTo(0, 0); toast("Saved"); }
 function upsert(collection, item) { const index = state[collection].findIndex(existing => existing.id === item.id); if (index >= 0) state[collection][index] = item; else state[collection].push(item); }
 function deleteItem(type, id) { const labels = { task: "task", subject: "subject and all its data", category: "category", topic: "topic" }; if (!confirm(`Delete this ${labels[type]}? This cannot be undone.`)) return; if (type === "subject") { state.subjects = state.subjects.filter(item => item.id !== id); state.categories = state.categories.filter(item => item.subjectId !== id); state.tasks = state.tasks.filter(item => item.subjectId !== id); state.topics = state.topics.filter(item => item.subjectId !== id); } if (type === "category") { state.categories = state.categories.filter(item => item.id !== id); state.tasks = state.tasks.map(item => item.categoryId === id ? { ...item, categoryId: "" } : item); } if (type === "task") state.tasks = state.tasks.filter(item => item.id !== id); if (type === "topic") state.topics = state.topics.filter(item => item.id !== id); save(); document.querySelector("#sheet").close(); render(); toast("Deleted"); }
-function menu() { openSheet("Your data", `<div class="menu-list"><button type="button" data-action="export">Export backup</button><button type="button" data-action="import">Import backup</button><button type="button" data-action="reset">Restore sample data</button></div><input id="import-file" type="file" accept="application/json" hidden>`); document.querySelector('[data-action="export"]').onclick = exportData; document.querySelector('[data-action="import"]').onclick = () => document.querySelector("#import-file").click(); document.querySelector("#import-file").onchange = importData; document.querySelector('[data-action="reset"]').onclick = () => { if (confirm("Replace your local data with the sample data?")) { state = seed(); save(); document.querySelector("#sheet").close(); render(); toast("Sample data restored"); } }; }
+function menu() { openSheet("Your data", `<div class="menu-list"><button type="button" data-action="export">Export backup</button><button type="button" data-action="import">Import backup</button><button type="button" data-action="reset">Clear all data</button></div><input id="import-file" type="file" accept="application/json" hidden>`); document.querySelector('[data-action="export"]').onclick = exportData; document.querySelector('[data-action="import"]').onclick = () => document.querySelector("#import-file").click(); document.querySelector("#import-file").onchange = importData; document.querySelector('[data-action="reset"]').onclick = () => { if (confirm("Delete all subjects, tasks, categories, and topics? This cannot be undone.")) { state = emptyState(); save(); document.querySelector("#sheet").close(); render(); toast("All data cleared"); } }; }
 function exportData() { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([JSON.stringify(state, null, 2)], { type: "application/json" })); link.download = `study-flow-backup-${new Date().toISOString().slice(0, 10)}.json`; link.click(); URL.revokeObjectURL(link.href); toast("Backup downloaded"); }
 function importData(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => { try { const incoming = JSON.parse(reader.result); if (!["subjects", "categories", "tasks", "topics"].every(key => Array.isArray(incoming[key]))) throw Error(); state = incoming; save(); document.querySelector("#sheet").close(); render(); toast("Backup imported"); } catch { toast("That file is not a Study Flow backup."); } }; reader.readAsText(file); }
 
