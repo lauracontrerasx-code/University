@@ -1,30 +1,5 @@
 # University Tracker
 
-## Phone-ready version (recommended)
-
-`mobile_pwa/` is the new responsive **Study Flow** version. It is a private,
-offline-first web app: its data stays in the browser on the device and it has
-JSON export/import backups. It uses the requested navy, teal, aqua, and mint
-palette.
-
-For a quick local preview, run:
-
-```powershell
-python run_mobile.py
-```
-
-Then open the phone address printed by the script while your computer and phone
-are on the same Wi-Fi. For installation and offline PWA support on a real phone,
-publish the contents of `mobile_pwa/` to any private HTTPS static host; browsers
-only enable service workers (the offline/install feature) on HTTPS or localhost.
-
-The prior desktop UI is preserved in `backups/desktop-ui-20260709-195841/` and
-the original desktop source is still in `university_tracker/`.
-
----
-
-## Legacy desktop version
-
 A local-only desktop app for tracking university subjects, topics, homework, grades, and deadlines.
 
 The app uses:

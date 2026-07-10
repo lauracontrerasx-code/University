@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#213A57">
+    <meta name="description" content="A private, offline university tracker.">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <title>Study Flow</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PRIVATE • OFFLINE</p>
+          <h1>Study Flow</h1>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="theme-button" type="button" aria-label="Switch to dark mode">☾</button>
+          <button class="icon-button" id="menu-button" type="button" aria-label="Open menu">☰</button>
+        </div>
+      </header>
+
+      <main id="app" tabindex="-1"></main>
+      <nav class="bottom-nav" aria-label="Primary navigation">
+        <button data-route="home" class="nav-link" type="button">Home</button>
+        <button data-route="tasks" class="nav-link" type="button">Tasks</button>
+        <button data-route="subjects" class="nav-link" type="button">Subjects</button>
+        <button data-route="grades" class="nav-link" type="button">Grades</button>
+      </nav>
+    </div>
+
+    <dialog id="sheet"></dialog>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
