@@ -4,8 +4,8 @@
   "description": "Private offline university tracker",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f2fbfa",
-  "theme_color": "#213A57",
+  "background_color": "#FAE5D8",
+  "theme_color": "#2A114B",
   "icons": [
     { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]

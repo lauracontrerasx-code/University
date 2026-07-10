@@ -52,8 +52,8 @@ def format_grade(grade: float | None, decimals: int = 1) -> str:
 
 def grade_color(grade: float | None) -> str:
     if grade is None:
-        return "#9A9AA5"
-    return "#57B981" if grade >= PASSING_GRADE else "#E26D63"
+        return "#DFB6B2"
+    return "#DFB6B2" if grade >= PASSING_GRADE else "#824D69"
 
 
 def make_table(headers: list[str]) -> QTableWidget:
@@ -476,7 +476,7 @@ class SubjectsTab(QWidget):
         if calculated_grade is None or calculated_grade["weighted_average"] is None:
             self.overall_grade.setText("--")
             self.overall_grade_detail.setText("No graded category data yet.")
-            self.overall_grade.setStyleSheet("color: #FFC212;")
+            self.overall_grade.setStyleSheet("color: #DFB6B2;")
         else:
             overall = calculated_grade["weighted_average"]
             self.overall_grade.setText(f"{overall:.2f}")
@@ -1111,135 +1111,135 @@ def apply_theme(app: QApplication) -> None:
         QWidget {
             font-family: Segoe UI, Arial, sans-serif;
             font-size: 10.5pt;
-            color: #F0F0F3;
+            color: #FAE5D8;
         }
         QMainWindow, QTabWidget::pane {
-            background: #171721;
+            background: #180018;
         }
         QTabBar::tab {
-            background: #1B1B24;
-            border: 1px solid #34343B;
-            color: #9A9AA5;
+            background: #2A114B;
+            border: 1px solid #522959;
+            color: #DFB6B2;
             padding: 9px 16px;
             margin-right: 2px;
         }
         QTabBar::tab:selected {
-            background: #2D2D32;
-            color: #FFC212;
-            border-bottom-color: #FFC212;
+            background: #522959;
+            color: #FAE5D8;
+            border-bottom-color: #DFB6B2;
         }
         #PageTitle {
             font-size: 20pt;
             font-weight: 700;
             padding: 6px 2px 12px 2px;
-            color: #F0F0F3;
+            color: #FAE5D8;
         }
         #Panel, #FormPanel {
-            background: #2D2D32;
-            border: 1px solid #34343B;
+            background: #522959;
+            border: 1px solid #824D69;
             border-radius: 8px;
         }
         #PanelTitle {
             font-size: 12.5pt;
             font-weight: 700;
             padding: 4px 0 8px 0;
-            color: #FFC212;
+            color: #FAE5D8;
         }
         #OverallGradeCard {
-            background: rgba(255, 194, 18, 0.12);
-            border: 1px solid rgba(255, 194, 18, 0.5);
+            background: rgba(223, 182, 178, 0.14);
+            border: 1px solid rgba(223, 182, 178, 0.58);
             border-radius: 8px;
             padding: 12px;
         }
         #OverallGradeLabel {
-            color: #9A9AA5;
+            color: #DFB6B2;
             font-size: 10pt;
             font-weight: 700;
         }
         #OverallGradeValue {
-            color: #FFC212;
+            color: #DFB6B2;
             font-size: 34pt;
             font-weight: 900;
             padding: 0;
         }
         #OverallGradeDetail {
-            color: #9A9AA5;
+            color: #DFB6B2;
             font-size: 10pt;
         }
         QTableWidget {
-            background: #202027;
-            alternate-background-color: #2D2D32;
-            border: 1px solid #34343B;
-            gridline-color: #34343B;
-            color: #F0F0F3;
-            selection-background-color: rgba(255, 194, 18, 0.12);
-            selection-color: #FFC212;
+            background: #2A114B;
+            alternate-background-color: #522959;
+            border: 1px solid #824D69;
+            gridline-color: #824D69;
+            color: #FAE5D8;
+            selection-background-color: rgba(223, 182, 178, 0.16);
+            selection-color: #FAE5D8;
         }
         QHeaderView::section {
-            background: #34343B;
-            color: #FFC212;
+            background: #824D69;
+            color: #FAE5D8;
             padding: 7px;
             border: 0;
             font-weight: 600;
         }
         QLineEdit, QTextEdit, QComboBox, QDateEdit, QDoubleSpinBox, QSpinBox {
-            background: #202027;
-            border: 1px solid #34343B;
+            background: #2A114B;
+            border: 1px solid #824D69;
             border-radius: 6px;
-            color: #F0F0F3;
+            color: #FAE5D8;
             min-height: 28px;
             padding: 6px;
         }
         QLineEdit:focus, QTextEdit:focus, QComboBox:focus, QDateEdit:focus,
         QDoubleSpinBox:focus, QSpinBox:focus {
-            border: 1px solid rgba(255, 194, 18, 0.5);
+            border: 1px solid rgba(223, 182, 178, 0.75);
         }
         QComboBox QAbstractItemView {
-            background: #202027;
-            border: 1px solid #34343B;
-            color: #F0F0F3;
-            selection-background-color: rgba(255, 194, 18, 0.12);
-            selection-color: #FFC212;
+            background: #2A114B;
+            border: 1px solid #824D69;
+            color: #FAE5D8;
+            selection-background-color: rgba(223, 182, 178, 0.16);
+            selection-color: #FAE5D8;
         }
         QPushButton {
-            background: #FFC212;
-            color: #171721;
+            background: #DFB6B2;
+            color: #180018;
             border: 0;
             border-radius: 6px;
             padding: 8px 12px;
             font-weight: 600;
         }
         QPushButton:hover {
-            background: #FFDD7A;
+            background: #FAE5D8;
         }
         QPushButton#HomeButton {
-            background: #FFC212;
+            background: #DFB6B2;
             border-radius: 8px;
-            color: #171721;
+            color: #180018;
             font-size: 28pt;
             font-weight: 800;
             min-width: 260px;
             min-height: 180px;
         }
         QPushButton#HomeButton:hover {
-            background: #FFDD7A;
+            background: #FAE5D8;
         }
         QToolBar {
-            background: #1B1B24;
-            border-bottom: 1px solid #34343B;
+            background: #2A114B;
+            border-bottom: 1px solid #824D69;
             spacing: 8px;
             padding: 4px;
         }
         QStatusBar {
-            background: #1B1B24;
-            color: #9A9AA5;
+            background: #2A114B;
+            color: #DFB6B2;
         }
         QScrollBar:vertical, QScrollBar:horizontal {
-            background: #202027;
+            background: #2A114B;
             border: 0;
         }
         QScrollBar::handle:vertical, QScrollBar::handle:horizontal {
-            background: #6B6B76;
+            background: #824D69;
             border-radius: 4px;
         }
         """
