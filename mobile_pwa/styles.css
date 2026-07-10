@@ -29,13 +29,13 @@ body.dark {
   --shadow: 0 10px 28px rgb(0 0 0 / 24%);
 }
 
-* { box-sizing: border-box; }
-html { background: var(--canvas); }
-body { margin: 0; min-width: 320px; background: var(--canvas); color: var(--ink); font: 16px/1.4 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { min-height: 100%; background: var(--canvas); -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-width: 320px; min-height: 100vh; min-height: 100dvh; overscroll-behavior-y: none; background: var(--canvas); color: var(--ink); font: 16px/1.4 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 .app-shell { width: min(100%, 680px); min-height: 100dvh; margin: auto; padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
-.topbar { min-height: 84px; padding: calc(18px + env(safe-area-inset-top)) 20px 14px; display: flex; align-items: center; justify-content: space-between; background: var(--navy); color: var(--cream); border-radius: 0 0 24px 24px; }
+.topbar { min-height: 84px; padding: calc(18px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 14px max(20px, env(safe-area-inset-left)); display: flex; align-items: center; justify-content: space-between; background: var(--navy); color: var(--cream); border-radius: 0 0 24px 24px; }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: 1.45rem; letter-spacing: -.02em; }
 h2 { font-size: 1.3rem; letter-spacing: -.025em; }
@@ -48,7 +48,7 @@ h3 { font-size: .98rem; }
 .install-banner strong { font-size: .86rem; }
 .install-banner span { margin-top: 1px; color: var(--blush); font-size: .72rem; }
 .install-button { min-height: 38px; padding: 7px 12px; color: var(--navy); background: var(--green); border: 0; border-radius: 11px; font-size: .78rem; font-weight: 900; }
-main { padding: 20px 16px; }
+main { padding: 20px max(16px, env(safe-area-inset-right)) 20px max(16px, env(safe-area-inset-left)); }
 .page-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .page-heading p { color: var(--muted); font-size: .88rem; }
 .stack { display: grid; gap: 14px; }
@@ -70,7 +70,7 @@ main { padding: 20px 16px; }
 .button-danger { background: var(--plum); color: var(--cream); }
 .button.small, .button-secondary.small, .button-danger.small { min-height: 38px; padding: 7px 11px; font-size: .82rem; }
 .fab { position: fixed; right: max(18px, calc((100vw - 680px) / 2 + 18px)); bottom: calc(90px + env(safe-area-inset-bottom)); width: 54px; height: 54px; border-radius: 50%; border: 0; background: var(--aqua); color: var(--navy); font-size: 1.8rem; font-weight: 500; box-shadow: 0 8px 20px rgb(82 41 89 / 28%); }
-.bottom-nav { position: fixed; z-index: 5; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 680px); padding: 9px 10px calc(9px + env(safe-area-inset-bottom)); display: grid; grid-template-columns: repeat(4, 1fr); background: rgb(250 229 216 / 94%); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+.bottom-nav { position: fixed; z-index: 5; bottom: 0; left: 50%; transform: translateX(-50%); width: min(100%, 680px); padding: 9px max(10px, env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)); display: grid; grid-template-columns: repeat(4, 1fr); background: rgb(250 229 216 / 94%); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
 .nav-link { min-height: 48px; color: var(--muted); background: transparent; border: 0; border-radius: 12px; font-size: .76rem; font-weight: 800; }
 .nav-link.active { color: var(--cream); background: var(--plum); }
 .list { display: grid; gap: 10px; }
@@ -96,7 +96,7 @@ dialog::backdrop { background: rgb(24 0 24 / 55%); }
 .close { width: 38px; height: 38px; border: 0; border-radius: 50%; color: var(--cream); background: var(--plum); font-size: 1.3rem; }
 .form { display: grid; gap: 13px; }
 label { display:grid; gap: 5px; color: var(--navy); font-size: .82rem; font-weight: 800; }
-input, select, textarea { width: 100%; min-height: 45px; color: var(--ink); background: var(--cream); border: 1px solid var(--blush); border-radius: 12px; padding: 10px; }
+input, select, textarea { width: 100%; min-height: 45px; color: var(--ink); background: var(--cream); border: 1px solid var(--blush); border-radius: 12px; padding: 10px; font-size: 16px; }
 textarea { min-height: 82px; resize: vertical; }
 .form-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .form-actions { display:flex; gap: 9px; margin-top: 4px; }

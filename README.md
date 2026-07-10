@@ -2,10 +2,24 @@
 
 ## Phone-ready version (recommended)
 
-`mobile_pwa/` is the new responsive **Study Flow** version. It is a private,
+`mobile_pwa/` is the responsive **Study Flow** version. It is a private,
 offline-first web app: its data stays in the browser on the device and it has
-JSON export/import backups. It uses the requested navy, teal, aqua, and mint
-palette.
+JSON export/import backups. GitHub Pages serves it over HTTPS so it can be
+installed as a Progressive Web App on iPhone, iPad, and other supported devices.
+
+### Install on iPhone or iPad
+
+1. Open [Laura's Study Flow](https://lauracontrerasx-code.github.io/University/)
+   in Safari. Recent iOS versions can also offer the same action from Chrome.
+2. Tap the **Share** button.
+3. Tap **Add to Home Screen**. If it is not visible, scroll down or choose
+   **Edit Actions** to add it.
+4. Keep the name **Study Flow**, then tap **Add**.
+5. Open Study Flow once while online so its files are cached for offline use.
+
+The app's records are saved only in that installed app/browser on that device.
+Use **Menu > Export backup** regularly, especially before clearing browser data
+or changing phones. Import the JSON backup from the same menu when needed.
 
 For a quick local preview, run:
 
@@ -14,9 +28,9 @@ python run_mobile.py
 ```
 
 Then open the phone address printed by the script while your computer and phone
-are on the same Wi-Fi. For installation and offline PWA support on a real phone,
-publish the contents of `mobile_pwa/` to any private HTTPS static host; browsers
-only enable service workers (the offline/install feature) on HTTPS or localhost.
+are on the same Wi-Fi. Local network HTTP is useful for visual testing, but iOS
+installation and service-worker testing must use the deployed HTTPS GitHub Pages
+site (or localhost on the same device).
 
 The prior desktop UI is preserved in `backups/desktop-ui-20260709-195841/` and
 the original desktop source is still in `university_tracker/`.

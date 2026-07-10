@@ -9,6 +9,7 @@ function applyTheme(theme) {
   const dark = theme === "dark";
   document.body.classList.toggle("dark", dark);
   localStorage.setItem("study-flow-theme", dark ? "dark" : "light");
+  document.querySelector('meta[name="theme-color"]').content = dark ? "#180018" : "#2A114B";
   const button = document.querySelector("#theme-button");
   button.textContent = dark ? "☀" : "☾";
   button.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
@@ -18,8 +19,18 @@ function isInstalled() {
   return window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 }
 
+function isAppleMobile() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+}
+
 function updateInstallBanner() {
-  document.querySelector("#install-banner").hidden = isInstalled();
+  const banner = document.querySelector("#install-banner");
+  banner.hidden = isInstalled();
+  if (isAppleMobile()) {
+    document.querySelector("#install-title").textContent = "Add Study Flow to Home Screen";
+    document.querySelector("#install-copy").textContent = "Use Share, then Add to Home Screen.";
+    document.querySelector("#install-button").textContent = "How";
+  }
 }
 
 async function installApp() {
@@ -30,9 +41,8 @@ async function installApp() {
     deferredInstallPrompt = null;
     return;
   }
-  const isApple = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const instructions = isApple
-    ? "In Safari, tap Share, then choose Add to Home Screen."
+  const instructions = isAppleMobile()
+    ? "In Safari or a supported iOS browser, tap Share, choose Add to Home Screen, then tap Add."
     : "Open your browser menu, then choose Install app or Add to Home screen.";
   openSheet("Install Study Flow", `<p class="muted">${instructions}</p><div class="form-actions"><button class="button" type="button" data-action="close">Got it</button></div>`);
 }

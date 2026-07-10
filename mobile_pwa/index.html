@@ -4,9 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#2A114B">
+    <meta name="color-scheme" content="light dark">
     <meta name="description" content="A private, offline university tracker.">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Study Flow">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="stylesheet" href="styles.css">
     <title>Study Flow</title>
   </head>
@@ -24,7 +31,7 @@
       </header>
 
       <aside class="install-banner" id="install-banner" aria-label="Install Study Flow">
-        <div><strong>Install Study Flow</strong><span>Open it like a normal phone app.</span></div>
+        <div><strong id="install-title">Install Study Flow</strong><span id="install-copy">Open it like a normal phone app.</span></div>
         <button class="install-button" id="install-button" type="button">Install</button>
       </aside>
 
